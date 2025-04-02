@@ -17,24 +17,22 @@ export class UsersService {
   private users : User[] = [];
   constructor(
     @InjectRepository(UserModel)
-    private usersRepository: Repository<UserModel>,
+    private userRepository: Repository<UserModel>,
   ) {}
-
-
-
-  async findOne(username: string) {
-    return this.users.find(user => user.username === username);
-  }
 
   async createUser(username: string, password: string) {
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = this.usersRepository.create({ username, password: hashedPassword });
-    return this.usersRepository.save(newUser);
+    const newUser = this.userRepository.create({ username, password: hashedPassword });
+    return this.userRepository.save(newUser);
   }
 
-  // async getAllUsers(): Promise<User[]> {
-  //   return this.usersRepository.find();
-  // }
+  async findOne(username: string){
+    return this.userRepository.findOne({ where: { username } });
+  }
+  
+  async getAllUsers(){
+    return this.userRepository.find();
+  }
   
 }
 

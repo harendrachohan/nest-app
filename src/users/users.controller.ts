@@ -1,4 +1,5 @@
-import { Controller, Post, Body, Get } from '@nestjs/common';
+import { Controller, Post, Get, Body, Req, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { UsersService } from './users.service';
 import { User as UserModel } from './users.entity';
 
@@ -15,8 +16,11 @@ export class UsersController {
     return this.usersService.createUser(username, password );
   }
 
-//   @Get()
-//   async getUsers(): Promise<UserModel[]> {
-//     return this.usersService.getAllUsers();
-//   }
+  
+  
+  @UseGuards(AuthGuard('jwt'))
+  @Get()
+  async getUsers(): Promise<UserModel[]> {
+    return this.usersService.getAllUsers();
+  }
 }
